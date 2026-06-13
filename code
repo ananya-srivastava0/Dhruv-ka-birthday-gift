@@ -1,0 +1,358 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Birthday Dhruv</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#050505;
+    overflow:hidden;
+    font-family:'Poppins',sans-serif;
+    color:white;
+    height:100vh;
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:0;
+}
+
+.loading-screen{
+    position:absolute;
+    inset:0;
+    background:#050505;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:10;
+    transition:1.2s ease;
+}
+
+.loading-text{
+    font-size:1.1rem;
+    letter-spacing:3px;
+    color:#d6d6d6;
+    animation:flicker 2s infinite;
+}
+
+@keyframes flicker{
+    0%,100%{opacity:1;}
+    50%{opacity:0.4;}
+}
+
+.main{
+    position:relative;
+    z-index:2;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    opacity:0;
+    transform:translateY(20px);
+    transition:1.5s ease;
+}
+
+.title{
+    font-family:'Cinzel',serif;
+    font-size:4rem;
+    letter-spacing:8px;
+    margin-bottom:15px;
+    text-shadow:0 0 25px rgba(255,255,255,0.2);
+}
+
+.subtitle{
+    color:#bfbfbf;
+    font-size:1rem;
+    margin-bottom:40px;
+    letter-spacing:2px;
+}
+
+.cards{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    width:min(90%,600px);
+}
+
+.card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    padding:18px;
+    border-radius:18px;
+    color:#ededed;
+    font-size:0.95rem;
+    transition:0.4s ease;
+    opacity:0;
+    transform:translateY(20px);
+}
+
+.card:hover{
+    transform:scale(1.03);
+    background:rgba(255,255,255,0.08);
+}
+
+button{
+    margin-top:40px;
+    padding:14px 34px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:black;
+    font-weight:600;
+    letter-spacing:1px;
+    cursor:pointer;
+    transition:0.4s ease;
+}
+
+button:hover{
+    transform:scale(1.08);
+}
+
+.final-message{
+    position:absolute;
+    bottom:35px;
+    text-align:center;
+    color:#bfbfbf;
+    opacity:0;
+    transition:1s ease;
+    font-size:0.95rem;
+    line-height:1.8;
+}
+
+.glow{
+    position:absolute;
+    width:400px;
+    height:400px;
+    background:radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+    border-radius:50%;
+    filter:blur(50px);
+    z-index:1;
+    animation:float 8s infinite ease-in-out;
+}
+
+.glow:nth-child(1){
+    top:-120px;
+    left:-100px;
+}
+
+.glow:nth-child(2){
+    bottom:-120px;
+    right:-100px;
+    animation-delay:3s;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(30px);
+    }
+}
+
+@media(max-width:700px){
+
+    .title{
+        font-size:2.4rem;
+        letter-spacing:4px;
+    }
+
+    .subtitle{
+        font-size:0.85rem;
+    }
+
+    .card{
+        font-size:0.85rem;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+<div class="glow"></div>
+
+<canvas id="particles"></canvas>
+
+<div class="loading-screen" id="loading">
+    <div class="loading-text">
+        INITIALIZING BIRTHDAY PROTOCOL...
+    </div>
+</div>
+
+<div class="main" id="main">
+
+    <div class="title">
+        HAPPY BIRTHDAY<br>DHRUV
+    </div>
+
+    <div class="subtitle">
+        CERTIFIED AESTHETIC MERCHANT
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            Professional girl attractor detected.
+        </div>
+
+        <div class="card">
+            Bro turned skincare and angles into an art form.
+        </div>
+
+        <div class="card">
+            Instagram algorithm’s favorite child.
+        </div>
+
+        <div class="card">
+            Main character energy is actually unfair.
+        </div>
+
+        <div class="card">
+            Your reels probably increase average screen time.
+        </div>
+
+    </div>
+
+    <button id="btn">
+        tap here
+    </button>
+
+</div>
+
+<div class="final-message" id="final">
+    Anyway, hope today feels different.<br>
+    You deserve at least one properly aesthetic birthday.<br><br>
+    — made by someone from the internet
+</div>
+
+<script>
+
+const loading = document.getElementById("loading");
+const main = document.getElementById("main");
+const cards = document.querySelectorAll(".card");
+const button = document.getElementById("btn");
+const finalMsg = document.getElementById("final");
+
+setTimeout(() => {
+
+    loading.style.opacity = "0";
+
+    setTimeout(() => {
+        loading.style.display = "none";
+
+        main.style.opacity = "1";
+        main.style.transform = "translateY(0px)";
+
+        cards.forEach((card,index)=>{
+            setTimeout(()=>{
+                card.style.opacity="1";
+                card.style.transform="translateY(0px)";
+            },300*index)
+        });
+
+    },1000);
+
+},2500);
+
+button.addEventListener("click",()=>{
+
+    document.body.style.background = "#0d0d12";
+
+    finalMsg.style.opacity = "1";
+
+    button.innerHTML = "birthday acknowledged";
+
+});
+
+
+
+/* particles */
+
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particlesArray = [];
+
+class Particle{
+    constructor(){
+        this.x = Math.random()*canvas.width;
+        this.y = Math.random()*canvas.height;
+        this.size = Math.random()*2;
+        this.speedY = Math.random()*0.5 + 0.2;
+        this.opacity = Math.random()*0.5;
+    }
+
+    update(){
+        this.y -= this.speedY;
+
+        if(this.y < 0){
+            this.y = canvas.height;
+            this.x = Math.random()*canvas.width;
+        }
+    }
+
+    draw(){
+        ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.fill();
+    }
+}
+
+function initParticles(){
+    for(let i=0;i<120;i++){
+        particlesArray.push(new Particle());
+    }
+}
+
+function animateParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particlesArray.forEach(particle=>{
+        particle.update();
+        particle.draw();
+    });
+
+    requestAnimationFrame(animateParticles);
+}
+
+initParticles();
+animateParticles();
+
+window.addEventListener("resize",()=>{
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+});
+
+</script>
+
+</body>
+</html>
+```
